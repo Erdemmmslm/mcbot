@@ -4,8 +4,7 @@
   "type": "module",
   "dependencies": {
     "mineflayer": "latest",
-    "minecraft-protocol": "latest",
-    "express": "^4.18.2"
+    "express": "latest"
   },
   "scripts": {
     "start": "node index.js"
