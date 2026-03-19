@@ -6,10 +6,13 @@ const port = process.env.PORT || 8080;
 app.get("/", (req, res) => res.send("Bot Aktif!"));
 app.listen(port, () => console.log("Web sunucusu " + port + " portunda calisiyor."));
 
+const BOT_USERNAME = "ErdemCokHavalıhahaha";
+const BOT_PASSWORD = "Erdem123";
+
 const botArgs = {
     host: 'brotula.aternos.host',
     port: 37192,
-    username: 'Erdem_Nobetci',
+    username: BOT_USERNAME,
     version: "1.21.1",
     auth: 'offline',
     hideErrors: true,
@@ -21,17 +24,22 @@ function createBot() {
     console.log("Bot baglanmaya calisiyor...");
     const bot = mineflayer.createBot(botArgs);
 
-    bot.once('login', () => {
-        console.log("Sunucuya giris yapildi.");
-    });
-
     bot.once('spawn', () => {
-        console.log("Bot spawn oldu. Login gonderiliyor...");
+        console.log("Bot spawn oldu. AuthMe islemi basliyor...");
+
+        // 2 saniye bekle, sonra once register dene
         setTimeout(() => {
-            bot.chat("/login Erdem123");
-            console.log("Login komutu gonderildi.");
+            bot.chat("/register " + BOT_PASSWORD + " " + BOT_PASSWORD);
+            console.log("Register komutu gonderildi.");
         }, 2000);
 
+        // 4 saniye bekle, sonra login yap (register basarisiz olsa bile login calisir)
+        setTimeout(() => {
+            bot.chat("/login " + BOT_PASSWORD);
+            console.log("Login komutu gonderildi.");
+        }, 4000);
+
+        // Her 15 saniyede bir hareket et
         setInterval(() => {
             if (bot.entity) {
                 bot.setControlState('jump', true);
