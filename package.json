@@ -1,0 +1,13 @@
+{
+  "name": "erdem-724-bot",
+  "version": "1.0.0",
+  "description": "7/24 Minecraft Botu",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "mineflayer": "^4.20.0",
+    "express": "^4.18.2"
+  }
+}
