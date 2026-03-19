@@ -4,47 +4,49 @@ import express from "express";
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.get("/", (req, res) => res.send("Erdem Bot Nöbette!"));
-app.listen(port, () => console.log(`Sunucu aktif.`));
+app.get("/", (req, res) => res.send("Erdem Bot 7/24 Railway Nöbetinde!"));
+app.listen(port, () => console.log(`Web sunucusu aktif.`));
 
-const botArgs = {
-    host: '185.107.192.132', 
-    port: 37192,
-    username: 'ErdemCokYakisikliDegilMi', // Her seferinde ismi biraz değiştir kanka
-    version: "1.21.11", // 1.21.11 protokolü için en güvenlisi bu
-    hideErrors: true,
-    connectTimeout: 45000, // Zaman tanıyoruz
-    checkTimeoutInterval: 120000,
-    disableChatSigning: true
-};
+const names = ["ErdemHavali", "Erdem_Reis_V8", "ErdemYakisikli", "Erdem_724_Safe"];
+let nameIndex = 0;
 
 function createBot() {
-    console.log("Sızma denemesi başlatıldı...");
-    const bot = mineflayer.createBot(botArgs);
+    const currentName = names[nameIndex % names.length];
+    console.log(`[${new Date().toLocaleTimeString()}] Bağlantı deneniyor: ${currentName}`);
+
+    const bot = mineflayer.createBot({
+        host: '185.107.192.132', 
+        port: 37192,
+        username: currentName,
+        version: "1.21.11", // Protokolü 1.21.11 ile uyumlu hale getirir
+        hideErrors: true,
+        connectTimeout: 45000,
+        disableChatSigning: true,
+        checkTimeoutInterval: 90000
+    });
 
     bot.once('spawn', () => {
-        console.log("VE ZAFER! Bot içeri sızdı, sayaç donduruldu.");
-        
-        // Hızlıca şifre
+        console.log("!!! ZAFER !!! Bot sunucuya yerleşti.");
         bot.chat("/login Erdem123");
         
-        // SAYAÇ DONDURAN HAREKET
+        // SAYAÇ DONDURUCU DÖNGÜ
         setInterval(() => {
             if (bot.entity) {
                 bot.setControlState('jump', true);
                 bot.swingArm('right');
                 setTimeout(() => bot.setControlState('jump', false), 500);
             }
-        }, 15000); 
+        }, 15000);
     });
 
-    bot.on('error', (err) => {
-        console.log("Bağlantı takıldı, pes etmek yok.");
+    bot.once('error', (err) => {
+        console.log("Bağlantı takıldı (ECONNRESET). İsim değiştirip tekrar deniyorum...");
+        nameIndex++;
     });
 
-    bot.on('end', () => {
-        // Aternos bizi atarsa 15 saniye nefes alıp tekrar saldırıyoruz
-        setTimeout(createBot, 15000);
+    bot.once('end', () => {
+        // Sunucu bizi atarsa 5 saniye bekle ve yeni isimle gir
+        setTimeout(createBot, 5000);
     });
 }
 
