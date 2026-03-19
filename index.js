@@ -1,13 +1,12 @@
+
 import mineflayer from "mineflayer";
 import express from "express";
-
-// --- Express Sunucusu (Railway için zorunlu) ---
+ 
 const app = express();
 const port = process.env.PORT || 8080;
 app.get("/", (req, res) => res.send("Bot Aktif!"));
-app.listen(port, () => console.log(`Web sunucusu ${port} portunda çalışıyor.`));
-
-// --- Bot Ayarları ---
+app.listen(port, () => console.log("Web sunucusu " + port + " portunda calisiyor."));
+ 
 const botArgs = {
     host: '185.107.192.132',
     port: 37192,
@@ -18,26 +17,22 @@ const botArgs = {
     connectTimeout: 45000,
     disableChatSigning: true
 };
-
-// --- Bot Oluşturma Fonksiyonu ---
+ 
 function createBot() {
-    console.log("Bot bağlanmaya çalışıyor...");
+    console.log("Bot baglanmaya calisiyor...");
     const bot = mineflayer.createBot(botArgs);
-
+ 
     bot.once('login', () => {
-        console.log("Sunucuya giriş yapıldı.");
+        console.log("Sunucuya giris yapildi.");
     });
-
+ 
     bot.once('spawn', () => {
-        console.log("Bot spawn oldu. Login komutu gönderiliyor...");
-
-        // AuthMe için 2 saniye bekle
+        console.log("Bot spawn oldu. Login gonderiliyor...");
         setTimeout(() => {
             bot.chat("/login Erdem123");
-            console.log("Login komutu gönderildi.");
+            console.log("Login komutu gonderildi.");
         }, 2000);
-
-        // Her 15 saniyede bir hareket et (idle timeout engellemek için)
+ 
         setInterval(() => {
             if (bot.entity) {
                 bot.setControlState('jump', true);
@@ -46,25 +41,24 @@ function createBot() {
             }
         }, 15000);
     });
-
+ 
     bot.on('chat', (username, message) => {
-        console.log(`[Sohbet] ${username}: ${message}`);
+        console.log("[Sohbet] " + username + ": " + message);
     });
-
+ 
     bot.on('error', (err) => {
-        console.log("Hata oluştu: " + err.message);
+        console.log("Hata: " + err.message);
     });
-
+ 
     bot.on('kicked', (reason) => {
-        console.log("Bot atıldı. Sebep: " + reason);
+        console.log("Bot atildi: " + reason);
         setTimeout(createBot, 20000);
     });
-
+ 
     bot.on('end', (reason) => {
-        console.log("Bağlantı kesildi. Sebep: " + reason);
+        console.log("Baglanti kesildi: " + reason);
         setTimeout(createBot, 15000);
     });
 }
-
-// --- Botu Başlat ---
+ 
 createBot();
