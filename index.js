@@ -3,7 +3,7 @@ import express from "express";
 
 const HOST = "Babapirolartowny.aternos.me";
 const PORT = 37192;
-const VERSION = "1.21.1";
+const VERSION = "1.21.11";
 const USERNAME = "ERdeminhavalibotu";
 const PASSWORD = "Sifre123";
 const RECONNECT_DELAY_MS = 10000;
