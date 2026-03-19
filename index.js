@@ -4,51 +4,46 @@ import express from "express";
 const app = express();
 const port = process.env.PORT || 8080;
 
-// Railway'in botu "uyuyor" sanmaması için küçük bir web sunucusu
-app.get("/", (req, res) => res.send("Erdem Bot 7/24 Railway Nöbetinde!"));
+app.get("/", (req, res) => res.send("Nöbetçi Bot Aktif!"));
 app.listen(port, () => console.log(`Web sunucusu ${port} portunda aktif.`));
 
 const botArgs = {
     host: '185.107.192.132', 
     port: 37192,
-    username: 'ErdemCokYakisikli',
-    version: false, // 1.21.11 uyumu için otomatik sürüm
-    hideErrors: true
+    username: 'Erdem_Reis_V6',
+    version: false, 
+    hideErrors: false,
+    // Aternos'un 'bu bot' dememesi için ek ayarlar:
+    connectTimeout: 30000,
+    disableChatSigning: true,
+    checkTimeoutInterval: 90000
 };
 
 function createBot() {
-    console.log("Bağlantı kuruluyor... Sayaç dondurma operasyonu.");
+    console.log("Bağlantı kuruluyor... Aternos kapısı zorlanıyor.");
     const bot = mineflayer.createBot(botArgs);
 
     bot.once('spawn', () => {
-        console.log("ZAFER! Bot sunucuya yerleşti ve ÇIKMAYACAK.");
+        console.log("BİNGO! Railway içeri sızmayı başardı.");
+        bot.chat("/login Erdem123");
         
-        // AuthMe Şifresi
-        setTimeout(() => {
-            bot.chat("/login Erdem123");
-            bot.chat("/register Erdem123 Erdem123");
-        }, 3000);
-
-        // --- 20 SANİYEDE BİR AFK KORUMASI ---
-        // Bu döngü bot içeride olduğu sürece hiç durmaz
         setInterval(() => {
             if (bot.entity) {
                 bot.setControlState('jump', true);
-                bot.swingArm('right'); // Kol salla (Aternos'u kandır)
+                bot.swingArm('right');
                 setTimeout(() => bot.setControlState('jump', false), 500);
-                console.log("Aktiflik sinyali gönderildi, sayaç durduruldu.");
             }
-        }, 20000);
-    });
-
-    // Eğer sunucu botu atarsa (Restart vb.), hemen geri dal!
-    bot.on('end', () => {
-        console.log("Bağlantı koptu! 10 saniye içinde tekrar sızılıyor...");
-        setTimeout(createBot, 10000);
+        }, 15000); // 15 saniyede bir hareket
     });
 
     bot.on('error', (err) => {
-        console.log("Hata oluştu, ama pes etmek yok: " + err.message);
+        console.log("Hata Detayı: " + err.message);
+        // ECONNRESET alırsak hemen pes etme, 10 saniye bekle ve tekrar dene
+    });
+
+    bot.on('end', () => {
+        console.log("Bağlantı koptu. 10 saniye sonra tekrar saldırıyoruz!");
+        setTimeout(createBot, 10000);
     });
 }
 
