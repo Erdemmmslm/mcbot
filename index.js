@@ -6,7 +6,7 @@ const port = process.env.PORT || 8080;
 app.get("/", (req, res) => res.send("Bot Aktif!"));
 app.listen(port, () => console.log("Web sunucusu " + port + " portunda calisiyor."));
 
-const BOT_USERNAME = "ErdemCokHavalıhahaha";
+const BOT_USERNAME = "Erdem_Nobetci";
 const BOT_PASSWORD = "Erdem123";
 
 const botArgs = {
@@ -20,33 +20,52 @@ const botArgs = {
     disableChatSigning: true
 };
 
+let isConnecting = false;
+let activeBot = null;
+
 function createBot() {
+    // Ayni anda sadece BIR baglanti olmali
+    if (isConnecting) {
+        console.log("Zaten baglaniliyor, atlaniyor...");
+        return;
+    }
+    isConnecting = true;
+
+    // Eski bot varsa temizle
+    if (activeBot) {
+        try { activeBot.quit(); } catch(e) {}
+        activeBot = null;
+    }
+
     console.log("Bot baglanmaya calisiyor...");
     const bot = mineflayer.createBot(botArgs);
+    activeBot = bot;
 
+    // AuthMe icin: spawn olur olmaz hemen login gonder
     bot.once('spawn', () => {
-        console.log("Bot spawn oldu. AuthMe islemi basliyor...");
+        console.log("Bot spawn oldu.");
+        isConnecting = false;
 
-        // 2 saniye bekle, sonra once register dene
-        setTimeout(() => {
-            bot.chat("/register " + BOT_PASSWORD + " " + BOT_PASSWORD);
-            console.log("Register komutu gonderildi.");
-        }, 2000);
+        // Hemen register dene (zaten kayitliysa hata verir ama sorun yok)
+        bot.chat("/register " + BOT_PASSWORD + " " + BOT_PASSWORD);
 
-        // 4 saniye bekle, sonra login yap (register basarisiz olsa bile login calisir)
+        // 1 saniye sonra login gonder
         setTimeout(() => {
             bot.chat("/login " + BOT_PASSWORD);
-            console.log("Login komutu gonderildi.");
-        }, 4000);
+            console.log("Login gonderildi.");
+        }, 1000);
 
-        // Her 15 saniyede bir hareket et
-        setInterval(() => {
+        // Her 10 saniyede bir hareket et (idle timeout icin)
+        const moveInterval = setInterval(() => {
+            if (!activeBot || activeBot !== bot) {
+                clearInterval(moveInterval);
+                return;
+            }
             if (bot.entity) {
                 bot.setControlState('jump', true);
-                bot.swingArm('right');
-                setTimeout(() => bot.setControlState('jump', false), 500);
+                setTimeout(() => bot.setControlState('jump', false), 300);
             }
-        }, 15000);
+        }, 10000);
     });
 
     bot.on('chat', (username, message) => {
@@ -59,12 +78,19 @@ function createBot() {
 
     bot.on('kicked', (reason) => {
         console.log("Bot atildi: " + reason);
-        setTimeout(createBot, 20000);
+        activeBot = null;
+        isConnecting = false;
+        // Atildiktan sonra 30 saniye bekle (sunucunun botu sistemden cikarmasi icin)
+        setTimeout(createBot, 30000);
     });
 
     bot.on('end', (reason) => {
         console.log("Baglanti kesildi: " + reason);
-        setTimeout(createBot, 15000);
+        if (activeBot === bot) {
+            activeBot = null;
+            isConnecting = false;
+            setTimeout(createBot, 20000);
+        }
     });
 }
 
