@@ -1,7 +1,7 @@
 {
-  "name": "erdem-724-bot",
+  "name": "mcbot-erdem",
   "version": "1.0.0",
-  "description": "7/24 Minecraft Botu",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
