@@ -15,8 +15,8 @@ app.listen(port, () => {
 // Bot Ayarları
 const botArgs = {
     host: 'Babapirolartowny.aternos.me',
-    port: 25565,
-    username: 'Nöbetçi_Erdem_724',
+    port: 37192,
+    username: 'ERdem_cok_yakisikli',
     version: '1.21.1'
 };
 
