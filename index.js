@@ -10,7 +10,7 @@ const BOT_USERNAME = "Erdem_Nobetci";
 const BOT_PASSWORD = "Erdem123";
 
 const botArgs = {
-    host: 'brotula.aternos.host',
+    host: 'eel.aternos.host',
     port: 37192,
     username: BOT_USERNAME,
     version: "1.21.1",
@@ -77,7 +77,7 @@ function createBot() {
     });
 
     bot.on('kicked', (reason) => {
-        console.log("Bot atildi: " + reason);
+        console.log("Bot atildi: " + JSON.stringify(reason));
         activeBot = null;
         isConnecting = false;
         // Atildiktan sonra 30 saniye bekle (sunucunun botu sistemden cikarmasi icin)
