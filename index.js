@@ -10,7 +10,7 @@ const BOT_USERNAME = "Erdem_Nobetci";
 const BOT_PASSWORD = "Erdem123";
 
 const botArgs = {
-    host: 'chub.aternos.host',
+    host: 'filefish.aternos.host',
     port: 37192,
     username: BOT_USERNAME,
     version: "1.21.1",
