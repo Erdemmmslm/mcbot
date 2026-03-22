@@ -10,7 +10,7 @@ const BOT_USERNAME = "Erdem_Nobetci";
 const BOT_PASSWORD = "Erdem123";
 
 const botArgs = {
-    host: 'filefish.aternos.host',
+    host: 'chub.aternos.host',
     port: 37192,
     username: BOT_USERNAME,
     version: "1.21.1",
@@ -33,17 +33,48 @@ function scheduleReconnect(delay) {
     }, delay);
 }
 
-function createBot() {
-    if (isConnecting) {
-        console.log("Zaten baglaniliyor, atlaniyor...");
-        return;
-    }
+const moves = [
+    { forward: true,  back: false, left: false, right: false },
+    { forward: false, back: true,  left: false, right: false },
+    { forward: false, back: false, left: true,  right: false },
+    { forward: false, back: false, left: false, right: true  },
+];
+let moveIndex = 0;
 
-    // Eski bot hala aktifse yeniden baglanma
-    if (activeBot && activeBot.entity) {
-        console.log("Bot zaten aktif, yeniden baglanma iptal.");
-        return;
-    }
+function doMovement(bot) {
+    // Onceki tum hareketleri durdur
+    bot.setControlState('forward', false);
+    bot.setControlState('back', false);
+    bot.setControlState('left', false);
+    bot.setControlState('right', false);
+
+    const move = moves[moveIndex % moves.length];
+    moveIndex++;
+
+    bot.setControlState('forward', move.forward);
+    bot.setControlState('back', move.back);
+    bot.setControlState('left', move.left);
+    bot.setControlState('right', move.right);
+
+    // 1 saniye yuru sonra dur
+    setTimeout(() => {
+        bot.setControlState('forward', false);
+        bot.setControlState('back', false);
+        bot.setControlState('left', false);
+        bot.setControlState('right', false);
+
+        // Zıpla
+        bot.setControlState('jump', true);
+        setTimeout(() => bot.setControlState('jump', false), 300);
+
+        // Kol sallamak
+        bot.swingArm('right');
+    }, 1000);
+}
+
+function createBot() {
+    if (isConnecting) return;
+    if (activeBot && activeBot.entity) return;
 
     isConnecting = true;
     activeBot = null;
@@ -62,16 +93,14 @@ function createBot() {
             console.log("Login gonderildi.");
         }, 1000);
 
+        // Her 8 saniyede bir hareket et
         const moveInterval = setInterval(() => {
             if (activeBot !== bot) {
                 clearInterval(moveInterval);
                 return;
             }
-            if (bot.entity) {
-                bot.setControlState('jump', true);
-                setTimeout(() => bot.setControlState('jump', false), 300);
-            }
-        }, 10000);
+            if (bot.entity) doMovement(bot);
+        }, 8000);
     });
 
     bot.on('chat', (username, message) => {
@@ -88,7 +117,6 @@ function createBot() {
         console.log("Bot atildi: " + reasonStr);
         isConnecting = false;
         activeBot = null;
-        // Atildiktan sonra 60 saniye bekle - sunucunun kaydi silmesi icin
         scheduleReconnect(60000);
     });
 
