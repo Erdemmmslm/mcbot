@@ -10,7 +10,7 @@ const BOT_USERNAME = "Erdem_Nobetci";
 const BOT_PASSWORD = "Erdem123";
 
 const botArgs = {
-    host: 'moosae.aternos.host',
+    host: 'horsefish.aternos.host',
     port: 43278,
     username: BOT_USERNAME,
     version: "1.21.11",
@@ -87,7 +87,7 @@ function createBot() {
         isConnecting = false;
         activeBot = bot;
 
-        bot.chat("heppinize meraba arkadaslar erdemin yakisikli botu goreve basladı");
+        bot.chat("heppinize meraba mal beyefendiler erdemin yakisikli botu goreve basladı");
         setTimeout(() => {
             bot.chat("/login " + BOT_PASSWORD);
             console.log("Login gonderildi.");
