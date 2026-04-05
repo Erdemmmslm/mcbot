@@ -11,7 +11,7 @@ const BOT_PASSWORD = "Erdem123";
 
 const botArgs = {
     host: 'horsefish.aternos.host',
-    port: 43278,
+    port: 37192,
     username: BOT_USERNAME,
     version: "1.21.11",
     auth: 'offline',
