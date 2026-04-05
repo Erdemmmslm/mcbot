@@ -87,7 +87,7 @@ function createBot() {
         isConnecting = false;
         activeBot = bot;
 
-        bot.chat("heppinize meraba arkadaslar erdemin yakisikli botu goreve basladı";
+        bot.chat("heppinize meraba arkadaslar erdemin yakisikli botu goreve basladı");
         setTimeout(() => {
             bot.chat("/login " + BOT_PASSWORD);
             console.log("Login gonderildi.");
