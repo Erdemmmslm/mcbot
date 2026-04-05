@@ -13,7 +13,7 @@ const botArgs = {
     host: 'moose.aternos.host',
     port: 43278,
     username: BOT_USERNAME,
-    version: "1.21.1",
+    version: "1.21.11",
     auth: 'offline',
     hideErrors: true,
     connectTimeout: 45000,
