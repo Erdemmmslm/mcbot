@@ -62,6 +62,7 @@ function doMovement(bot) {
         bot.setControlState('back', false);
         bot.setControlState('left', false);
         bot.setControlState('right', false);
+           bot.chat("ya erdem cok yakiiskli degil mi";
 
         // Zıpla
         bot.setControlState('jump', true);
@@ -87,7 +88,7 @@ function createBot() {
         isConnecting = false;
         activeBot = bot;
 
-        bot.chat("heppinize meraba mal beyefendiler erdemin yakisikli botu goreve basladı");
+        bot.chat("/register " + BOT_PASSWORD + " " + BOT_PASSWORD);
         setTimeout(() => {
             bot.chat("/login " + BOT_PASSWORD);
             console.log("Login gonderildi.");
