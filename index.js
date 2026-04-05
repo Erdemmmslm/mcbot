@@ -10,7 +10,7 @@ const BOT_USERNAME = "Erdem_Nobetci";
 const BOT_PASSWORD = "Erdem123";
 
 const botArgs = {
-    host: 'moose.aternos.host',
+    host: 'moosae.aternos.host',
     port: 43278,
     username: BOT_USERNAME,
     version: "1.21.11",
