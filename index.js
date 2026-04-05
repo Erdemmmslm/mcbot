@@ -10,8 +10,8 @@ const BOT_USERNAME = "Erdem_Nobetci";
 const BOT_PASSWORD = "Erdem123";
 
 const botArgs = {
-    host: 'capelin.aternos.host',
-    port: 37192,
+    host: 'moose.aternos.host',
+    port: 43278,
     username: BOT_USERNAME,
     version: "1.21.1",
     auth: 'offline',
@@ -87,7 +87,7 @@ function createBot() {
         isConnecting = false;
         activeBot = bot;
 
-        bot.chat("/register " + BOT_PASSWORD + " " + BOT_PASSWORD);
+        bot.chat("heppinize meraba arkadaslar erdemin yakisikli botu goreve basladı";
         setTimeout(() => {
             bot.chat("/login " + BOT_PASSWORD);
             console.log("Login gonderildi.");
