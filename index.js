@@ -62,7 +62,7 @@ function doMovement(bot) {
         bot.setControlState('back', false);
         bot.setControlState('left', false);
         bot.setControlState('right', false);
-           bot.chat("ya erdem cok yakiiskli degil mi";
+           bot.chat("ya erdem cok yakiiskli degil mi");
 
         // Zıpla
         bot.setControlState('jump', true);
